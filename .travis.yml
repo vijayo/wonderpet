@@ -1,5 +1,3 @@
   language: java
   sudo: required
-  group: stable
-  dist: precise
-  os: linux
+
