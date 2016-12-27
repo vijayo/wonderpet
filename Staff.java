@@ -1,115 +1,134 @@
-//This class is use for get and set variables
+//This class is the main menu of add, edit, delete,and search staff.
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package domain;
+package UI.Staff;
 
 
 
-public class Staff{
-    private String S_ID;
-    private String S_Name;
-    private String S_Department;
-    private String S_Tel;
-    private String S_Address;
-    private String S_DOB;
-    private double S_Salary;
-    public static int C_Staff = 0;
-	
-    public Staff(){}
-    
-    public Staff(String S_ID){
-        this.S_ID = S_ID;
-    }
-    
-    public Staff(String S_ID,String S_Name,double S_Salary){
-        this.S_ID = S_ID;
-        this.S_Name= S_Name;
-        this.S_Salary=S_Salary;
-    }
-    
-    public Staff(String S_ID,String S_Name,String S_Department, String S_Tel, String S_Address, String S_DOB,double S_Salary){
-        this.S_ID         = S_ID;
-        this.S_Name       = S_Name;
-        this.S_Department = S_Department;
-        this.S_Tel        = S_Tel;
-        this.S_Address    = S_Address;
-        this.S_DOB        = S_DOB;
-        this.S_Salary     = S_Salary;
-        C_Staff++;
-    }
-    
-//get
-    public String getS_ID(){
-        return S_ID;
-    }
-    
-    public String getS_Name(){
-        return S_Name;
-    }
-    
-    public String getS_Department(){
-        return S_Department;
-    }
-    
-    public String getS_Tel(){
-        return S_Tel;
-    }
-    
-    public String getS_Address(){
-        return S_Address;
-    }
-    
-    public String getS_DOB(){
-        return S_DOB;
-    }
-    
-    public double getS_Salary(){
-        return S_Salary;
-    }
+import Control.MaintainStaffControl;
+import UI.MainMenu;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+
+public class Staff extends JFrame{
+
+    private MaintainStaffControl staffControl;
+    private JButton add = new JButton("Add new");
+    private JButton update = new JButton("Update");
+    private JButton delete = new JButton("Delete");
+    private JButton Read = new JButton("View");
+    private JButton search = new JButton("Search");
+    private JLabel L1 = new  JLabel("Welcome to BOBO Restaurant.");
+    private JLabel background = new JLabel (new ImageIcon(getClass().getResource("/images/bobo.png")));
+    private ImageIcon Exit = new ImageIcon(getClass().getResource("/images/Exit.png"));
+    private JButton m_menu = new JButton(Exit);
+
+    public Staff(){
+        staffControl = new MaintainStaffControl();
+        L1.setFont(new Font("Magneto", Font.BOLD + Font.ITALIC,80));
+        L1.setForeground(Color.WHITE);
+        add.setFont(new Font("Magneto",Font.BOLD  + Font.ITALIC,35));
+        add.setForeground(Color.DARK_GRAY);
+        update.setFont(new Font("Magneto",Font.BOLD  + Font.ITALIC,35));
+        update.setForeground(Color.DARK_GRAY);
+        delete.setFont(new Font("Magneto",Font.BOLD  + Font.ITALIC,35));
+        delete.setForeground(Color.DARK_GRAY);
+        Read.setFont(new Font("Magneto",Font.BOLD  + Font.ITALIC,35));
+        Read.setForeground(Color.DARK_GRAY);
+        search.setFont(new Font("Magneto",Font.BOLD  + Font.ITALIC,35));
+        search.setForeground(Color.DARK_GRAY);
+        JPanel p1 = new JPanel(new GridLayout(3,1,0,79));
+        p1.add(L1);
+        p1.setOpaque(false);
         
-//set
-    public void setS_ID(String S_ID){
-        this.S_ID = S_ID;
+        JPanel p2 = new JPanel(new GridLayout(1,5,30,25));
+        p2.add(add);
+        p2.add(update);
+        p2.add(Read);
+        p2.add(delete);
+        p2.add(search);
+        p2.setOpaque(false);
+        p1.add(p2, BorderLayout.CENTER);
+        
+        JPanel p3 = new JPanel(new GridLayout(1,4,0,25));
+        p3.add(new JLabel());
+        p3.add(new JLabel());
+        p3.add(new JLabel());
+        p3.add(m_menu,BorderLayout.SOUTH);
+        p3.setOpaque(false);
+        p1.add(p3,BorderLayout.SOUTH);
+        
+        background.setLayout(new FlowLayout());
+        background.add(p1);
+        add(background);
+        
+        add.addActionListener(new addnew());
+        update.addActionListener(new updatestaff());
+        delete.addActionListener(new deletestaff());
+        search.addActionListener(new searchstaff());
+        
+// To view all staff details
+        Read.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                new View_staff_record();
+            }
+        });
+        
+        m_menu.addActionListener(new main());
+        setTitle("Staff");
+        pack();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setVisible(true);
+        
     }
-
-    public void setS_Name(String S_Name){
-        this.S_Name = S_Name;
+    
+//Add new staff details to database
+    private class addnew implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            new Add_staff(); 
+        }
     }
-
-    public void setS_Department(String S_Department){
-        this.S_Department = S_Department;
+    
+//Edit and update staff's records
+    private class updatestaff implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            new Update_staff();
+        }
     }
-
-    public void setS_Tel(String S_Tel){
-        this.S_Tel = S_Tel;
+    
+//Delete staff's records 
+    private class deletestaff implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            new Delete_staff();
+        }
     }
-
-    public void setS_Address(String S_Address){
-        this.S_Address = S_Address;
+    
+//Search for specific staff to view the staff details
+    private class searchstaff implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            new Search_staff();
+        }
     }
-
-    public void setS_DOB(String S_DOB){
-        this.S_DOB = S_DOB;
-    }
-
-    public void setS_Salary(double S_Salary){
-        this.S_Salary = S_Salary;
-    }
-
-    @Override
-    public String toString(){
-        return String.format("%-6s", S_ID);
-    }
-
-    public String toString1(){
-        return String.format("%-6s, %-25s,%-.2f", S_ID, S_Name,S_Salary);
-    }
-
-    public String toString2(){
-        return String.format("%-6s, %-25s, %-10s, %-11s, %-70s, %-10s, %-.2f", 
-                S_ID, S_Name, S_Department,S_Tel, S_Address, S_DOB, S_Salary);
-    }
+  
+// Back to main menu
+    private class main implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            dispose(); 
+            new MainMenu();
+        }
+    }  
+  
 }
