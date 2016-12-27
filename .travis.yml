@@ -1,5 +1,5 @@
- language: java
- sudo: required
- group: stable
- dist: precise
- os: linux
+ "language": java
+  "sudo": required
+  "group": stable
+  "dist": precise
+  "os": linux
